@@ -11,6 +11,13 @@ When an outage is resolved, AutoMortem is triggered via UiPath Maestro. It autom
 3. **Synthesizes** this unstructured data using Generative AI (Google Gemini 2.5 Pro) to cross-reference the chat discussions with the code deployments.
 4. **Generates** a beautifully formatted, strictly factual PDF report containing a Chronological Timeline, the Root Cause (linking the exact broken PR), and actionable Next Steps.
 
+## Backend Architecture
+AutoMortem relies on a lightweight, highly modular Python backend designed to integrate flawlessly with both UiPath Cloud and external developer tools.
+* **Flask Webhook Server (`server.py`):** Acts as the entry point, listening for POST requests from UiPath Maestro when an incident is resolved.
+* **Custom API Integrations (`api/`):** Contains modular Python clients (`slack_client.py`, `github_client.py`) built using the `requests` library to fetch the raw data necessary for the post-mortem.
+* **LLM Synthesis Engine (`core/synthesizer.py`):** Passes the raw chat logs and git commits to the **Google Gemini 2.5 Pro** LLM via the `google-genai` SDK, using strict prompt engineering to guarantee blameless, hallucination-free markdown output.
+* **PDF Generation (`main.py`):** Converts the LLM's raw markdown output into an enterprise-ready PDF document using the `markdown-pdf` library.
+
 ## UiPath Components Used
 This solution relies heavily on the **UiPath Automation Cloud** for orchestration and logic flow. 
 
