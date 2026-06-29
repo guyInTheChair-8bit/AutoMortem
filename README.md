@@ -16,7 +16,11 @@ This solution relies heavily on the **UiPath Automation Cloud** for orchestratio
 
 ![Maestro Workflow](imgs/maestro%20workflow.png)
 
-* **UiPath Maestro (BPMN):** The core orchestration engine. As shown in the workflow diagram above, Maestro triggers our backend webhook (`server.py`) when an incident is marked resolved. The BPMN logic dictates the precise flow of the automation.
+* **UiPath Maestro (BPMN):** The core orchestration engine. As shown in the workflow diagram above, Maestro orchestrates the entire incident resolution lifecycle using several key BPMN elements:
+  * **Message Start Event:** Triggers the workflow automatically when a new incident is created.
+  * **Timer Event & PagerDuty Integration:** Uses a polling loop with a "Wait 30 seconds" timer and a PagerDuty connector to continuously fetch the incident status.
+  * **Exclusive Gateway:** Checks "Is Incident Resolved?". If not, it loops back; if yes, it breaks the loop.
+  * **HTTP Request Task:** Once resolved, it fires a POST request to trigger our backend webhook (`server.py`) to generate the Post-Mortem.
 * **UiPath Orchestrator & Queues:** Once the PDF is generated, our python API client (`uipath_client.py`) authenticates via OAuth 2.0 (using Confidential Applications and Folder IDs) to push the final status back into an Orchestrator Queue for human review.
 
 ## Agent Architecture & AI Integration
