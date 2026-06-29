@@ -1,4 +1,4 @@
-# AutoMortem 🤖 📑
+# AutoMortem
 
 **AutoMortem** is an enterprise-grade AI automation tool that instantly generates high-quality, blameless After Action Reports (Post-Mortems) following production incidents. 
 
