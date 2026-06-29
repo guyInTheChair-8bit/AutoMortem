@@ -1,0 +1,6 @@
+requests
+python-dotenv
+anthropic
+google-genai
+flask
+markdown-pdf
