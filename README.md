@@ -1,8 +1,9 @@
 # AutoMortem
 
+## Project Description
 **AutoMortem** is an enterprise-grade AI automation tool that instantly generates high-quality, blameless After Action Reports (Post-Mortems) following production incidents. 
 
-By integrating deeply with your communication and version control tools, AutoMortem removes the manual burden of incident documentation so your Site Reliability Engineers (SREs) can focus on building, not paperwork.
+**The Problem it Solves:** When servers crash, engineers firefight. Once the issue is resolved, fatigued engineers are forced to manually dig through chat logs and code commits to write detailed Post-Mortems. This tedious process leads to burnout and missed details. By integrating deeply with your communication and version control tools, AutoMortem removes this manual burden so your Site Reliability Engineers (SREs) can focus on building, not paperwork.
 
 ## What it does
 When an outage is resolved, AutoMortem is triggered via UiPath Maestro. It automatically:
@@ -18,7 +19,7 @@ AutoMortem relies on a lightweight, highly modular Python backend designed to in
 * **LLM Synthesis Engine (`core/synthesizer.py`):** Passes the raw chat logs and git commits to the **Google Gemini 2.5 Pro** LLM via the `google-genai` SDK, using strict prompt engineering to guarantee blameless, hallucination-free markdown output.
 * **PDF Generation (`main.py`):** Converts the LLM's raw markdown output into an enterprise-ready PDF document using the `markdown-pdf` library.
 
-## UiPath Components Used
+## UiPath Components
 This solution relies heavily on the **UiPath Automation Cloud** for orchestration and logic flow. 
 
 ![Maestro Workflow](imgs/maestro%20workflow.png)
@@ -30,8 +31,10 @@ This solution relies heavily on the **UiPath Automation Cloud** for orchestratio
   * **HTTP Request Task:** Once resolved, it fires a POST request to trigger our backend webhook (`server.py`) to generate the Post-Mortem.
 * **UiPath Orchestrator & Queues:** Once the PDF is generated, our python API client (`uipath_client.py`) authenticates via OAuth 2.0 (using Confidential Applications and Folder IDs) to push the final status back into an Orchestrator Queue for human review.
 
-## Agent Architecture & AI Integration
-This project extensively utilizes **Coding Agents** and generative AI across the entire software development lifecycle:
+## Agent Type
+**Explicit Statement:** This solution exclusively utilizes **Coded Agents**. All the core AI orchestration logic, API polling, and LLM synthesis is built in custom Python, rather than relying on UiPath's low-code Agent Builder. 
+
+However, during the development and scaffolding of this project, we extensively utilized AI developer agents across the entire software development lifecycle:
 
 1. **Antigravity CLI (Agentic Coding):** We used the Antigravity CLI to autonomously write, scaffold, and refactor our Python backend integrations (Slack, GitHub, and UiPath clients). 
    ![Antigravity CLI Prompt](imgs/antigravity%20cli%20prompt.png)
@@ -50,6 +53,7 @@ This project extensively utilizes **Coding Agents** and generative AI across the
 * A UiPath Automation Cloud Account (with Orchestrator Queues and a registered External Application for OAuth)
 
 ## Setup Instructions
+Follow this detailed, step-by-step guidance to configure and run the solution locally for judging:
 
 1. **Clone the repository:**
    ```bash
